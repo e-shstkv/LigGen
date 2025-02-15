@@ -43,7 +43,7 @@ def liggen_cli():
         lf.joinprocesses_make(remove=True)
     else:
         processes_file_full = lf.joinprocesses_make(file_name=True)
-    parrallelisation_file_full = os.path.join(cwd, f"liggen_files{slash}" + 'for_parallel.py')
+    parrallelisation_file_full = os.path.join(cwd, f"src{slash}" + 'for_parallel.py')
 
     if len(sys.argv) > 1:
         print(f"Only program name required.")
