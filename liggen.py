@@ -4,7 +4,7 @@ import sys
 import json
 import math
 import subprocess
-import liggen_files as lf
+import src as lf
 
 
 commands = ['q', 'h', 's', 'f', 'b', 'p', 'a', 'fi', 'fo', 'i', 'm', 'cpu']
