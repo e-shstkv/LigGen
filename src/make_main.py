@@ -84,7 +84,7 @@ def all_waters(ion_pairs=None):
     if qp == 0:
         print(f"Found {len_ion_pairs * count_cpu} atom pairs. CPU count will be used: {count_cpu}\n")
     t_start = time.time()
-    for n, i in enumerate(ion_pairs[:26]):
+    for n, i in enumerate(ion_pairs):
         if qp == 0:
             if n == int(len_ion_pairs * 0.01):
                 remaining_time(t_start=t_start, len_ion_pairs=len_ion_pairs, n=n)
@@ -107,12 +107,6 @@ def all_waters(ion_pairs=None):
             if k == 'blijniy_4_2_A' and v != 0:
                 x0, y0, z0 = round(v[0][5][0], 1), round(v[0][5][1], 1), round(v[0][5][2], 1)
                 x1, y1, z1 = round(v[1][5][0], 1), round(v[1][5][1], 1), round(v[1][5][2], 1)
-                # print(f"\tPolar pair: {v[0]}--{v[1]}\n\t"
-                #       # f"Coords 1'st atom: {x0, y0, z0}\n\t"
-                #       # f"Coords 2'd atom: {x1, y1, z1}\n\t"
-                #       f"n: {n}\n\t"
-                #       f"length: {v[2]}\n\t")
-
                 circle_fragments = gf.find_circle_fragments(atom0=v[0][1], x0=x0, y0=y0, z0=z0,
                                                             atom1=v[1][1], x1=x1, y1=y1, z1=z1, length=v[2])
                 if circle_fragments:
@@ -122,11 +116,6 @@ def all_waters(ion_pairs=None):
             if k == 'dalniy_8_0_A' and v != 0:
                 x0, y0, z0 = round(v[0][5][0], 1), round(v[0][5][1], 1), round(v[0][5][2], 1)
                 x1, y1, z1 = round(v[1][5][0], 1), round(v[1][5][1], 1), round(v[1][5][2], 1)
-                # print(f"\tPolar pair: {v[0]}--{v[1]}\n\t"
-                #       # f"Coords 1'st atom: {x0, y0, z0}\n\t"
-                #       # f"Coords 2'd atom: {x1, y1, z1}\n\t"
-                #       f"n: {n}\n\t"
-                #       f"length: {v[2]}\n\t")
                 circle_fragments = gf.find_circle_fragments(atom0=v[0][1], x0=x0, y0=y0, z0=z0,
                                                             atom1=v[1][1], x1=x1, y1=y1, z1=z1, length=v[2])
                 if circle_fragments:
