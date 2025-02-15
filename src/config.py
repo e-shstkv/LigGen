@@ -4,8 +4,8 @@ import platform
 
 
 """
-сonfig.py file takes info from CLI program (LigGen) and return prepared info to the script or program files (liggen_file [dir]):
- make_main, geometry_function, content_parser etc...
+сonfig.py file takes info from CLI program (LigGen) and return prepared info to the script or program files.
+(liggen_file [dir]): make_main, geometry_function, content_parser etc...
 """
 
 
