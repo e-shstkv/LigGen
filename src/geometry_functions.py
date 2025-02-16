@@ -78,7 +78,7 @@ def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=
     atom00 = cfg.water_bond_parameter_radii(atom=atom0)
     atom11 = cfg.water_bond_parameter_radii(atom=atom1)
     if atom0:
-        if length / (atom00 + atom11) < 0.95:  # have solutions   && (5 % RMSD)
+        if length / (atom00 + atom11) <= 0.95:  # have solutions   && (5 % RMSD)
             x2, y2, z2 = sympy.symbols('x y z', real=True)
             eq2 = sympy.Eq((x2 - x0e) ** 2 + (y2 - y0e) ** 2, atom00 ** 2 - (z2 - z0e) ** 2)
             eq3 = sympy.Eq((x2 - x1e) ** 2 + (y2 - y1e) ** 2, atom11 ** 2 - (z2 - z1e) ** 2)
