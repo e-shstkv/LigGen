@@ -4,8 +4,8 @@ import platform
 
 
 """
-сonfig.py file takes info from CLI program (LigGen) and return prepared info to the script or program files.
-(liggen_file [dir]): make_main, geometry_function, content_parser etc...
+File 'сonfig.py' takes info from CLI program and return prepared info to the 
+script or program files (liggen_files [dir]):
 """
 
 
@@ -23,7 +23,7 @@ def platform_get():
 
 def configuration_make(print_result=None, file_name=None):
     """
-    check is file
+    is file exist
     :return:Make 'configuration_liggen.JSON'
     """
     slash = platform_get()
@@ -55,7 +55,7 @@ def configuration_make(print_result=None, file_name=None):
 
 def joinprocesses_make(file_name=None, remove=None):
     """
-    check is file
+    is file exist
     :return:Make
     """
     slash = platform_get()
@@ -95,8 +95,7 @@ def configuration_read(key,):
 
 def flag_distant():
     """
-    flags for ближний (2.4-3.4(4.2) Angstrom) and дальний (4.2-8.0 Angstrom) environment
-    :return:flag (distant is True or None); ближний flag is true by default.
+    :return:flag (take into account var(bridges -> True or None); flag == yes by default.
     """
     param = configuration_read('bridges')
     if param == 'yes':
@@ -106,7 +105,9 @@ def flag_distant():
 
 
 def count_cpu():
-    """"""
+    """
+    :return: % load of CPU
+    """
     count = configuration_read('cpu count')
     cpu_n = []
     for q in count:
@@ -135,7 +136,7 @@ def water_bond_parameter_radii(atom=None):
 
 def choose_precision():
     """
-    quantity of points based on angle between points
+    Count of points on the circle based on angle between ATOM points
     :return: count of points on the circle
     """
     precision = int(round(360 / (configuration_read('precision')), 0))

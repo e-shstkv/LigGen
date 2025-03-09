@@ -14,6 +14,10 @@ count_cpu = cfg.count_cpu()
 
 
 def process():
+    """
+    make list of tasks
+    :return: count of tasks, based on count CPU
+    """
     ion_pairs = cp.find_ion_pairs_3_2()
     len_i_p = len(ion_pairs)
     copy_len_i_p = len_i_p
@@ -47,6 +51,10 @@ def process():
 
 
 def process_load(oxygen=None):
+    """
+    :param oxygen: one result (i)
+    :return: results (i, i + 1, ...)
+    """
     filename = cfg.joinprocesses_make(file_name=True)
     with open(filename, 'r+') as f:
         data_oxygen = json.load(f)
@@ -84,7 +92,7 @@ def all_waters(ion_pairs=None):
     if qp == 0:
         print(f"Found {len_ion_pairs * count_cpu} atom pairs. CPU count will be used: {count_cpu}\n")
     t_start = time.time()
-    for n, i in enumerate(ion_pairs):
+    for n, i in enumerate(ion_pairs[:10]):
         if qp == 0:
             if n == int(len_ion_pairs * 0.01):
                 remaining_time(t_start=t_start, len_ion_pairs=len_ion_pairs, n=n)
@@ -107,6 +115,7 @@ def all_waters(ion_pairs=None):
             if k == 'blijniy_4_2_A' and v != 0:
                 x0, y0, z0 = round(v[0][5][0], 1), round(v[0][5][1], 1), round(v[0][5][2], 1)
                 x1, y1, z1 = round(v[1][5][0], 1), round(v[1][5][1], 1), round(v[1][5][2], 1)
+
                 circle_fragments = gf.find_circle_fragments(atom0=v[0][1], x0=x0, y0=y0, z0=z0,
                                                             atom1=v[1][1], x1=x1, y1=y1, z1=z1, length=v[2])
                 if circle_fragments:
@@ -116,6 +125,7 @@ def all_waters(ion_pairs=None):
             if k == 'dalniy_8_0_A' and v != 0:
                 x0, y0, z0 = round(v[0][5][0], 1), round(v[0][5][1], 1), round(v[0][5][2], 1)
                 x1, y1, z1 = round(v[1][5][0], 1), round(v[1][5][1], 1), round(v[1][5][2], 1)
+
                 circle_fragments = gf.find_circle_fragments(atom0=v[0][1], x0=x0, y0=y0, z0=z0,
                                                             atom1=v[1][1], x1=x1, y1=y1, z1=z1, length=v[2])
                 if circle_fragments:
@@ -126,3 +136,4 @@ def all_waters(ion_pairs=None):
     # print(f"\nprocess end {t_process_end} seconds.")
     process_load(all_points)
 
+# 09_03_25

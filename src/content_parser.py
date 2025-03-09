@@ -3,7 +3,7 @@ import pKa
 import config as cfg
 
 """
-moduleContent parser - get info from .cif file format.
+Module 'content parser' gets info from .cif file format;
 """
 
 
@@ -99,7 +99,7 @@ def h2o():
 
 
 def find_empirical_water_env():
-    """find practice water environment of aminoacids nearest [angstrom] angstrom to water"""
+    """Empirical aqueous environment of amino acids"""
     angstrom = 5.0
     p_atoms = protein_atoms()
     h2os = h2o()
@@ -123,27 +123,6 @@ def find_empirical_water_env():
                             if p_atom1 not in water_environment_fragment:
                                 water_environment_fragment.append(p_atom1)
 
-            # # dump content //:
-
-            # file_name = f"15_02_25_practice_water_env_{pdb_id}.txt"
-            # # fip = f"c:\\users\\алексей\\pycharmprojects\\pdbstruct\\3blr.cif"
-            # fip = "C:\\Users\\Алексей\\Desktop\\PURE .CIF FILES\\3blr.cif"
-            #
-            # file_input = contents_pdb(cif_file_path=fip)
-            # with open(file_name, 'w') as f:
-            #     for water in water_environment_fragment:
-            #         # print(water[0], type(water[0]))
-            #         for atom in file_input:
-            #             if atom[0] == 'ATOM':
-            #                 # print()
-            #                 # print(water[0][0], atom[1], type(water[0][0]), type(atom[1]))
-            #                 if water[0][0] == int(atom[1]):
-            #                     # print(water[0][0], atom[1], type(water[0][0]), type(atom[1]))
-            #                     atom = f"ATOM   {atom[1]} {atom[2]}  {atom[3]}   {atom[4]} {atom[5]} {atom[6]} {atom[7]} {atom[8]}  ? {atom[10]}  {atom[11]}  {atom[12]} {atom[13]} {atom[14]}  ? {atom[-5]} {atom[-4]} {atom[-3]} {atom[-2]}   {atom[-1]} "
-            #                     # atom = f"{atom}"
-            #                     f.write(atom + '\n')
-
-            # # dump content \\
             return water_environment_fragment
 
         else:
@@ -153,7 +132,9 @@ def find_empirical_water_env():
 
 
 def find_ion_pairs_3_2():
-
+    """
+    :return: list of atoms, structured by distance.
+    """
     LG_mode = cfg.configuration_read('mode')
     p_atoms = 0
     if LG_mode == 'prp':
@@ -191,13 +172,12 @@ def find_ion_pairs_3_2():
 
                                                 if flag_d:
                                                     if 3.2 < length0 <= 6.4:
-                                                        if blijniy_4_2_A == 0:  # to where check? (not in loop)
+                                                        if blijniy_4_2_A == 0:
                                                             dalniy_8_0_A = [p_atom0, p_atom1, length0]
 
                                                 if blijniy_4_2_A == 0 and p_atom0 not in alone_fg:
                                                     alone_fg.append(p_atom0)
-                                                    alone = [p_atom0]  # not pair with blijniy
-                                                    # print(f"Check repeat {alone}")
+                                                    alone = [p_atom0]
 
                                             if p_atom0[3] == 'MET' or p_atom0[3] == 'CYS':
                                                 if p_atom1[3] != 'MET' and p_atom1[3] != 'CYS':
@@ -212,7 +192,6 @@ def find_ion_pairs_3_2():
                                                     if blijniy_4_2_A == 0 and p_atom0 not in alone_fg:
                                                         alone_fg.append(p_atom0)
                                                         alone = [p_atom0]
-                                                        # print(f"Check repeat {alone}")
 
                                                 if p_atom1[3] == 'MET' or p_atom1[3] == 'CYS':
                                                     if 2.4 < length0 <= 3.8:
@@ -226,7 +205,6 @@ def find_ion_pairs_3_2():
                                                     if blijniy_4_2_A == 0 and p_atom0 not in alone_fg:
                                                         alone_fg.append(p_atom0)
                                                         alone = [p_atom0]
-                                                        # print(f"Check repeat {alone}")
 
                                             if p_atom0[3] != 'MET' and p_atom0[3] != 'CYS':
                                                 if p_atom1[3] == 'MET' or p_atom1[3] == 'CYS':
@@ -241,7 +219,6 @@ def find_ion_pairs_3_2():
                                                     if blijniy_4_2_A == 0 and p_atom0 not in alone_fg:
                                                         alone_fg.append(p_atom0)
                                                         alone = [p_atom0]
-                                                        # print(f"Check repeat {alone}")
 
                                             if blijniy_4_2_A != 0 or dalniy_8_0_A != 0 or alone != 0:
                                                 ion_pair = {'blijniy_4_2_A': blijniy_4_2_A,

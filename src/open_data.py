@@ -11,6 +11,10 @@ def fo_pdb_id():
 
 
 def open_processes(joinprocesses):
+    """
+    :param joinprocesses: from process load -> results (i, i + 1, ...)
+    :return: list of lists of points [Kp, point]
+    """
     oxygens = []
     with open(joinprocesses, 'r') as f_n:
         content = json.load(f_n)
@@ -19,17 +23,17 @@ def open_processes(joinprocesses):
                 for water0 in vline:
                     for water1 in water0:
 
-                        sort_value = water1[1] - 1
+                        Kp = water1[1]
                         coord = water1[0]
-                        oxygen = [sort_value, coord]
+                        oxygen = [Kp, coord]
                         oxygens.append(oxygen)
     return oxygens
 
 
 def find_relevant_oxygens(oxygens=None):
     """
-    Works with sorted oxygens by p-value
-    :returns relevant (by p-value) oxygens;
+    works with sorted oxygens by Kp-value
+    :returns relevant (+ sorted by distance) oxygens;
     """
     oxygens_copy = oxygens[:]
     for i0, oxygen0 in enumerate(oxygens):

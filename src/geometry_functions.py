@@ -7,11 +7,13 @@ import config as cfg
 
 def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=None, y1=None, z1=None, length=None):
     """
-    Def 'find_circle' find points on the circle, formed by intersection of two spheres;
-    points (xyz) separated by constant length between each other; return list of points [based on precision].
+    find points on the circle, formed by intersection of two spheres;
+    points (i, i + 1 ...) separated by constant length;
+    :return: list of points [based on precision].
     """
     # time_start = time.time()
 
+    # Sympy boost ->
     coords_0 = [x0, y0, z0]
     coords_1 = [x1, y1, z1]
     x0e, y0e, z0e, x1e, y1e, z1e = x0, y0, z0, x1, y1, z1
@@ -70,6 +72,7 @@ def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=
                 if i[0] == 2:
                     z0e, z1e = z0 - point_0, z1 - point_0
                     div_z = point_0
+    # Sympy boost <-
 
     p_atoms = cp.protein_atoms()
     polar_atoms = ['N', 'O', 'S']
@@ -78,7 +81,7 @@ def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=
     atom00 = cfg.water_bond_parameter_radii(atom=atom0)
     atom11 = cfg.water_bond_parameter_radii(atom=atom1)
     if atom0:
-        if length / (atom00 + atom11) <= 0.95:  # have solutions   && (5 % RMSD)
+        if length / (atom00 + atom11) < 0.95:  # have solutions   && (5 % RMSD)
             x2, y2, z2 = sympy.symbols('x y z', real=True)
             eq2 = sympy.Eq((x2 - x0e) ** 2 + (y2 - y0e) ** 2, atom00 ** 2 - (z2 - z0e) ** 2)
             eq3 = sympy.Eq((x2 - x1e) ** 2 + (y2 - y1e) ** 2, atom11 ** 2 - (z2 - z1e) ** 2)
@@ -130,11 +133,9 @@ def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=
                         if length0 < 2.4:
                             exclude.append(coordinate0)
 
-#   line: [[3266], 'C', 'CB', 'THR', '111', [10.562, -14.09, -29.421]]
                 for coordinate0 in coordinates:
                     if coordinate0 not in exclude:
-                        polar = 1
-                        carbon = 1
+                        polar, carbon, f_polar, f_carbon = 1, 1, 1, 1
                         x3, y3, z3 = coordinate0[0], coordinate0[1], coordinate0[2]
                         for p_atom0 in p_atoms:
                             x4, y4, z4 = round(p_atom0[5][0], 1), round(p_atom0[5][1], 1), round(p_atom0[5][2], 1)
@@ -152,16 +153,18 @@ def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=
                                     d0 = length0 - 3.2
                                     d1 = d0 / 1.8
                                     d2 = 1 - d1
-                                    carbon += d2
+                                    f_carbon += d2
 
                                 if p_atom0[1] in polar_atoms:
                                     d0 = length0 - 3.2
                                     d1 = d0 / 1.8
                                     d2 = 1 - d1
-                                    polar += d2
+                                    f_polar += d2
 
                         if parametr_sort:
-                            val_env = polar / carbon
+                            int_val = polar / carbon
+                            float_val = f_polar / f_carbon
+                            val_env = int_val + float_val
                             pnt = [coordinate0, val_env]
                             coordinates_and_values.append(pnt)
 
@@ -178,8 +181,7 @@ def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=
             exclude = []
             avrg_coord = (x1 + x0) / 2, (y1 + y0) / 2, (z0 + z1) / 2
             x5, y5, z5 = avrg_coord[0], avrg_coord[1], avrg_coord[2]
-            carbon = 1
-            polar = 1
+            polar, carbon, f_polar, f_carbon = 1, 1, 1, 1
             for p_atom0 in p_atoms:
                 x6, y6, z6 = round(p_atom0[5][0], 1), round(p_atom0[5][1], 1), round(p_atom0[5][2], 1)
                 length0 = math.sqrt((x5 - x6) ** 2 + (y5 - y6) ** 2 + (z5 - z6) ** 2)
@@ -203,19 +205,21 @@ def find_circle_fragments(atom0=None, x0=None, y0=None, z0=None, atom1=None, x1=
                             d0 = length0 - 3.2
                             d1 = d0 / 1.8
                             d2 = 1 - d1
-                            carbon += d2
+                            f_carbon += d2
 
                         if p_atom0[1] in polar_atoms:
                             d0 = length0 - 3.2
                             d1 = d0 / 1.8
                             d2 = 1 - d1
-                            polar += d2
+                            f_polar += d2
 
             if avrg_coord in exclude:
                 return None
 
             if parametr_sort:
-                val_env = polar / carbon
+                int_val = polar / carbon
+                float_val = f_polar / f_carbon
+                val_env = int_val + float_val
                 pnt = [avrg_coord, val_env]
                 return [pnt]
 
