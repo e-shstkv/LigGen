@@ -7,7 +7,7 @@ import subprocess
 import src as lf
 
 
-commands = ['q', 'h', 's', 'f', 'b', 'p', 'a', 'fi', 'fo', 'i', 'm', 'cpu']
+commands = ['q', 'h', 's', 'b', 'p', 'a', 'fi', 'i', 'm', 'cpu']
 commands_text = f"q (quit), h (help), s (start), b (bridges), m (mode), p (angle), a (atoms), fi (file input)," \
                 f" cpu (load CPU), i (info)."
 command_not = f"Command not found."
@@ -33,7 +33,6 @@ def main_p(parrallelisation_file_full, process_time):
 
 
 def liggen_cli():
-
     slash = lf.platform_get()
     cwd = os.getcwd()
     cfg_file_full = lf.configuration_make(file_name=True)
@@ -41,8 +40,10 @@ def liggen_cli():
     processes_file_full = 0
     if os.path.exists(lf.joinprocesses_make(file_name=True)):
         lf.joinprocesses_make(remove=True)
-    else:
+
+    if not os.path.exists(lf.joinprocesses_make(file_name=True)):
         processes_file_full = lf.joinprocesses_make(file_name=True)
+
     parrallelisation_file_full = os.path.join(cwd, f"src{slash}" + 'for_parallel.py')
 
     if len(sys.argv) > 1:
@@ -111,7 +112,7 @@ def liggen_cli():
                                 res0 = input(f"\nPress 's' to start a job or 'c' to change LigGen configuration file.\n"
                                              f"Press 'q' to quit.\n")
                                 if res0 == 'q':
-                                    lf.joinprocesses_make(remove=True)
+                                    # lf.joinprocesses_make(remove=True)
                                     sys.exit()
 
                                 if res0 == 's':
@@ -182,13 +183,13 @@ def liggen_cli():
                                                         flag_m = False
 
                                                     else:
-                                                        print(f"Required only prw (predict relative to water) or prp "
-                                                              f"(predict relative to protein).")
+                                                        print(f"Required only prw (predict relative to water) or prp"
+                                                              f" (predict relative to protein).")
 
                                             if command == "p":
                                                 flag_p = True
                                                 while flag_p:
-                                                    parameter_p = input(f"Enter an angle (2-90°) between neighbours points on a circle"
+                                                    parameter_p = input(f"Enter an angle (in range 2-90°) between neighbours points on a circle"
                                                                         f" (2 = 2°, 10 = 10°, etc) or press 'q' to change the command.\n")
                                                     if parameter_p == "q":
                                                         flag_p = False
@@ -196,7 +197,7 @@ def liggen_cli():
                                                         try:
                                                             parameter_p = math.fabs(int(parameter_p))
                                                         except ValueError:
-                                                            print(f"Фальс! Parameter [{parameter_p}] must be a number.\n")
+                                                            print(f"Parameter [{parameter_p}] must be a number.\n")
                                                         else:
                                                             if 2 <= parameter_p <= 90:
                                                                 contents['precision'] = parameter_p
@@ -204,20 +205,20 @@ def liggen_cli():
                                                                     json.dump(contents, fp)
                                                                 flag_p = False
                                                             else:
-                                                                print(f"{parameter_p} is not between 2 and 90.\n")
+                                                                print(f"Parameter [{parameter_p}] is not between 2 and 90.\n")
 
                                             if command == "cpu":
                                                 flag_cpu = True
                                                 while flag_cpu:
-                                                    parameter_p = input(f"Enter desired нагрузку на процессор (load 30% by default) "
-                                                                        f"or press 'q' to change the command.\n")
+                                                    parameter_p = input(f"Specify the desired processor load (load 30% by default)"
+                                                                        f" or press 'q' to change the command.\n")
                                                     if parameter_p == "q":
                                                         flag_cpu = False
                                                     else:
                                                         try:
                                                             parameter_p = math.fabs(int(parameter_p))
                                                         except ValueError:
-                                                            print(f"Фальс! Parameter [{parameter_p}] must be a number.")
+                                                            print(f"Parameter [{parameter_p}] must be a number.")
                                                         else:
                                                             if 10 <= parameter_p <= 80:
                                                                 parameter_p = f"{parameter_p}%"
@@ -226,7 +227,7 @@ def liggen_cli():
                                                                     json.dump(contents, fp)
                                                                 flag_cpu = False
                                                             else:
-                                                                print(f"{parameter_p} is not between 10 and 80.\n")
+                                                                print(f"Parameter [{parameter_p}] is not between 10 and 80.\n")
 
                                             if command == "a":
                                                 atoms = ['nitrogen', 'oxygen', 'sulphur']
@@ -239,9 +240,9 @@ def liggen_cli():
                                                         try:
                                                             value = math.fabs(float(value))
                                                         except ValueError:
-                                                            print(f"Фальс! Parameter [{value}] must be a number.")
+                                                            print(f"Parameter [{value}] must be a number.")
                                                         else:
-                                                            if 2 < value < 5:
+                                                            if 2.4 < value < 2.4:
                                                                 if i == 0:
                                                                     atoms_values['nitrogen'] = value
 
@@ -253,7 +254,7 @@ def liggen_cli():
 
                                                                 i += 1
                                                             else:
-                                                                print(f"{atoms[i].title()} hydrate radii must be between 2-5 Angstrom.")
+                                                                print(f"Radius of hydration [{atoms[i].title()}] must be between 2.4-4.2 Angstrom.")
                                                             if i == len(atoms):
                                                                 with open(cfg_file_full, 'w') as f1:
                                                                     json.dump(contents, f1)
