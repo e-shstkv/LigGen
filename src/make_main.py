@@ -92,7 +92,7 @@ def all_waters(ion_pairs=None):
     if qp == 0:
         print(f"Found {len_ion_pairs * count_cpu} atom pairs. CPU count will be used: {count_cpu}\n")
     t_start = time.time()
-    for n, i in enumerate(ion_pairs[:10]):
+    for n, i in enumerate(ion_pairs):
         if qp == 0:
             if n == int(len_ion_pairs * 0.01):
                 remaining_time(t_start=t_start, len_ion_pairs=len_ion_pairs, n=n)
